@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8">
+        <style>
+            body {
+                font-family: monospace;
+                padding: 10px;
+            }
+            #page {
+                width: 300px;
+                margin: 0 auto;
+            }
+            #result {
+                padding: 10px;
+                background-color: lightgray;
+            }
+        </style>
+        <script type="text/javascript">
+
+            // Capital Recovery Factor
+            // https://en.wikipedia.org/wiki/Capital_recovery_factor
+            function crf(interestRate, compoundingPeriods) {
+                if (compoundingPeriods < 2) return 1;
+                interestRate /= 100;
+                return ((interestRate * Math.pow(1 + interestRate, compoundingPeriods))
+                        / (Math.pow(1 + interestRate, compoundingPeriods) - 1)).toFixed(5);
+            }
+
+            function calc() {
+                var interestRate = document.getElementById('i').value;
+                var compoundingPeriods = document.getElementById('p').value;
+                var table = [];
+                for (var period = 1; period <= compoundingPeriods; period++) {
+                    table.push(crf(interestRate, period));
+                }
+                document.getElementById('result').innerHTML = table.join(', ');
+            }
+
+        </script>
+    </head>
+    <body onload="calc();">
+        <div id="page">
+            <form onsubmit="calc(); return false;">
+                <p>Interest Rate (%): <input type="text" id="i" name="i" value="2.99"></p>
+                <p>Compounding Periods: <input type="text" id="p" name="p" value="12"></p>
+                <p><input type="submit" value="Calculate"></p>
+                <fieldset>
+                    <legend>Capital Recovery Factor (CRF)</legend>
+                    <p id="result"></p>
+                </fieldset>
+            </form>
+        </div>
+    </body>
+</html>
